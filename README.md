@@ -4,18 +4,18 @@ Poloniex API Perl
 Access to Poloniex API with Perl
 
 ## Constructor:
+```
 my $pol = Poloniex->new(
     'api_key'    => 'XXX-XXX-XXX-XXX',
     'api_secret' => 'yurLongSecret'
 );
 
-my $bal = $pol->get_trading_pairs;
-
+my $bal = $pol->returnTicker;
+```
 ## Returms:
-
 - returnTicker
 Returns the ticker for all markets. Sample output:
-`
+```
 Got get_trading_pairs:{
           'XMR_BLK' => {
                          'low24hr' => '0.00113156',
@@ -32,8 +32,12 @@ Got get_trading_pairs:{
           'ETH_ETC' => {
 .......
 }
-`
-# Prerequested Perl modules:
+```
+You can find a list of features in the
+[online documentation]https://poloniex.com/support/api/
+
+# Software requirements
+- Perl 5.16.0 or higher
 - JSON::XS
 - WWW::Curl::Easy
 - LWP::Protocol::https
