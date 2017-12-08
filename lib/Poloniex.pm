@@ -1,17 +1,12 @@
 package Poloniex;
-#use strict;
-#use warnings;
-use Time::HiRes qw(time);
-use POSIX qw(strftime);
-use PHP::HTTPBuildQuery qw(http_build_query);
+use strict;
+use warnings;
+use Poloniex::Util;
+
 use Digest::SHA qw(hmac_sha512_hex);
 use LWP::UserAgent;
 use JSON::XS;
 use WWW::Curl::Easy;
-use Test::JSON;
-use Config::Simple;
-use Scalar::Util 'blessed';
-use Helper;
 use Data::Dumper;
 
 our $VERSION = '0.01';
@@ -62,18 +57,13 @@ sub query {
 
     $curl->setopt(CURLOPT_WRITEDATA, \$response_body);
 
-    log Dumper(\$data);
-
     # Send request
     my $retcode = $curl->perform;
-
-    log "Reply: ".$response_body;
 
     if ($retcode == 0) {
         my $response_code = $curl->getinfo(CURLINFO_HTTP_CODE);
         if (my $dec = JSON::XS::decode_json($response_body)) {
-            if   (ref($dec) eq "HASH") {return %{$dec};}
-            else                       {return @{$dec};}
+            return $dec;
         } else {
             return
         }
@@ -92,21 +82,7 @@ sub retrieveJSON {
     return $json;
 }
 
-sub get_ticker {
-    my $self = shift;
-    my $pair = shift;
-
-    my $prices = $self->retrieveJSON($self->{public_url}.'?command=returnTicker');
-
-    if (!$pair || ($pair eq "ALL")) {return %{$prices};}    # Dereference the hash reference
-    else {
-        $pair = uc($pair);
-        if   ($prices->{$pair}) {return %{$prices->{$pair}};}
-        else                    {return {};}                    # Dereference the hash reference or return empty anon hash
-    }
-}
-
-sub get_trade_history {
+sub returnTradeHistory {
     my $self = shift;
     my $pair = shift;
 
@@ -115,7 +91,7 @@ sub get_trade_history {
     return @{$trades};
 }
 
-sub get_order_book {
+sub returnOrderBook {
     my $self = shift;
     my $pair = shift;
 
@@ -124,7 +100,7 @@ sub get_order_book {
     return %{$orders};
 }
 
-sub get_volume {
+sub return24hVolume {
     my $self   = shift;
     my $volume = shift;
 
@@ -133,7 +109,7 @@ sub get_volume {
     return %{$volume};
 }
 
-sub get_trading_pairs {
+sub returnTicker {
     my $self = shift;
 
     my $tickers = $self->retrieveJSON($self->{public_url}.'?command=returnTicker');
@@ -141,13 +117,13 @@ sub get_trading_pairs {
     return $tickers;
 }
 
-sub get_balances {
+sub returnBalances {
     my $self = shift;
 
     return $self->query({command => 'returnBalances'});
 }
 
-sub get_open_orders {    # Returns array of open order hashes
+sub returnOpenOrders {    # Returns array of open order hashes
     my $self = shift;
     my $pair = shift;
 
@@ -156,7 +132,7 @@ sub get_open_orders {    # Returns array of open order hashes
                     'currencyPair' => uc($pair)});
 }
 
-sub get_my_trade_history {
+sub returnTradeHistoryByPair {
     my $self = shift;
     my $pair = shift;
 
@@ -193,7 +169,7 @@ sub sell {
                    });
 }
 
-sub cancel_order {
+sub cancelOrder {
     my $self         = shift;
     my $pair         = shift;
     my $order_number = shift;
