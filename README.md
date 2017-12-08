@@ -10,13 +10,15 @@ my $pol = Poloniex->new(
     'api_secret' => 'yurLongSecret'
 );
 
-my $bal = $pol->returnTicker;
+my $ticker   = $pol->returnTicker;
+my $balances = $pol->returnBalances;
+...
 ```
 ## Returms:
 - returnTicker
 Returns the ticker for all markets. Sample output:
 ```
-Got get_trading_pairs:{
+Got returnTicker:{
           'XMR_BLK' => {
                          'low24hr' => '0.00113156',
                          'quoteVolume' => '6493.80371046',
