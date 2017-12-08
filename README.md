@@ -10,7 +10,12 @@ my $pol = Poloniex->new(
 );
 
 my $bal = $pol->get_trading_pairs;
-###Returms:
+
+## Returms:
+
+- returnTicker
+Returns the ticker for all markets. Sample output:
+
 Got get_trading_pairs:{
           'XMR_BLK' => {
                          'low24hr' => '0.00113156',
