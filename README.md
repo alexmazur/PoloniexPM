@@ -16,7 +16,7 @@ my $bal = $pol->returnTicker;
 - returnTicker
 Returns the ticker for all markets. Sample output:
 ```
-Got get_trading_pairs:{
+Got returnTicker:{
           'XMR_BLK' => {
                          'low24hr' => '0.00113156',
                          'quoteVolume' => '6493.80371046',
