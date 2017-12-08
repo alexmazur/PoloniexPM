@@ -15,7 +15,7 @@ my $bal = $pol->get_trading_pairs;
 
 - returnTicker
 Returns the ticker for all markets. Sample output:
-
+`
 Got get_trading_pairs:{
           'XMR_BLK' => {
                          'low24hr' => '0.00113156',
@@ -32,7 +32,7 @@ Got get_trading_pairs:{
           'ETH_ETC' => {
 .......
 }
-
+`
 # Prerequested Perl modules:
 - JSON::XS
 - WWW::Curl::Easy
