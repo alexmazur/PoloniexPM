@@ -1,7 +1,7 @@
 package Poloniex;
 use strict;
 use warnings;
-use Poloniex::Util;
+use Poloniex::Util qw(http_build_query);
 
 use Digest::SHA qw(hmac_sha512_hex);
 use LWP::UserAgent;
@@ -24,7 +24,6 @@ sub new {
 
 sub initialize {
     my $self = shift;
-
     $self->{trading_url} = "https://poloniex.com/tradingApi";
     $self->{public_url}  = "https://poloniex.com/public";
 }
@@ -37,9 +36,8 @@ sub query {
     my $key    = $self->{api_key};
     my $secret = $self->{api_secret};
 
-    $req{'nonce'} = int time;
-    $req{'nonce'} = $req{'nonce'}*2000000;
-
+    $req{'nonce'} = time;
+    $req{'nonce'} = $req{'nonce'}*100000000;
     my $data = \%req;
 
     # Generate the POST data string
@@ -123,7 +121,7 @@ sub returnBalances {
     return $self->query({command => 'returnBalances'});
 }
 
-sub returnOpenOrders {    # Returns array of open order hashes
+sub returnOpenOrders {
     my $self = shift;
     my $pair = shift;
 
@@ -131,6 +129,16 @@ sub returnOpenOrders {    # Returns array of open order hashes
       $self->query({'command'      => 'returnOpenOrders',
                     'currencyPair' => uc($pair)});
 }
+
+sub returnCompleteBalances {
+    my $self = shift;
+    my $pair = shift;
+
+    return
+      $self->query({'command' => 'returnCompleteBalances',
+                    'account' => 'all'});
+}
+
 
 sub returnTradeHistoryByPair {
     my $self = shift;
