@@ -1,7 +1,7 @@
 package Poloniex;
 use strict;
 use warnings;
-use Poloniex::Util;
+use Poloniex::Util qw(http_build_query);
 
 use Digest::SHA qw(hmac_sha512_hex);
 use LWP::UserAgent;
