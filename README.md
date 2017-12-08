@@ -10,7 +10,9 @@ my $pol = Poloniex->new(
     'api_secret' => 'yurLongSecret'
 );
 
-my $bal = $pol->returnTicker;
+my $ticker   = $pol->returnTicker;
+my $balances = $pol->returnBalances;
+...
 ```
 ## Returms:
 - returnTicker
